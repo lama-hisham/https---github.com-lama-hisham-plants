@@ -1,4 +1,3 @@
-'''''
 import torchvision.transforms as transforms
 
 def get_augmented_transform():
@@ -7,4 +6,4 @@ def get_augmented_transform():
         transforms.RandomRotation(10)
     ])
     return transform
-'''
+''''

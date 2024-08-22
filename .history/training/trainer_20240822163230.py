@@ -39,7 +39,7 @@ def train_model(model, train_loader, val_loader, num_epochs, device):
                 _, predicted = torch.max(outputs, 1)
                 correct += (predicted == labels).sum().item()
                 
-                if batch_idx % 10 == 0:  # Print every 10 batches
+                if batch_idx % 100 == 0:  # Print every 10 batches
                     print(f'Val Batch {batch_idx}, Val Loss: {loss.item()}')
 
         accuracy = correct / len(val_loader.dataset) * 100  # Convert to percentage

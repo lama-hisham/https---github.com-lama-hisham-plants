@@ -44,3 +44,5 @@ def train_model(model, train_loader, val_loader, num_epochs, device):
 
         accuracy = correct / len(val_loader.dataset) * 100  # Convert to percentage
         print(f'Epoch {epoch+1}, Train Loss: {train_loss / len(train_loader)}, Val Loss: {val_loss / len(val_loader)}, Val Acc: {accuracy:.2f}%')
+
+
