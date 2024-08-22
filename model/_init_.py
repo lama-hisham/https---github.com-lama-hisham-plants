@@ -1,0 +1,1 @@
+from .modelarchitecture import define_model
