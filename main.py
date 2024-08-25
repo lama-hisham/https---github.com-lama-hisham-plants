@@ -1,5 +1,3 @@
-# main/main.py
-
 import torch
 import os
 from torchvision import transforms, models

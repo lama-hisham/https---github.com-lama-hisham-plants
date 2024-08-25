@@ -5,7 +5,7 @@ import torch
 from torch.utils.data import DataLoader
 from torchvision.datasets import ImageFolder
 
-image_folder = r'C:\Users\Lenovo\Downloads\extractedcitrus\Citrus'
+image_folder = r'C:\Users\Lama\Downloads\extractedcitrus\Citrus'
 
 images_pil = []
 for root, dirs, files in os.walk(image_folder):
