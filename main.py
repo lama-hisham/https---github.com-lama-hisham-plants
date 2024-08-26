@@ -1,37 +1,32 @@
 import torch
-import os
-from torchvision import transforms, models
-from torchvision.datasets import ImageFolder
-from torch.utils.data import DataLoader, Subset
+from torchvision import models
+from torch.utils.data import DataLoader
 from training.trainer import train_model
-from data.preprocessed import get_preprocessed_transform
+from data.augmented import get_train_transform, get_val_transform
 from data.split import split_data
+from evaluation.evaluator import test_model
+import torch.optim as optim
+import torch.nn as nn
+from torchvision.datasets import ImageFolder
 
 # Set the dataset path and model parameters
-dataset_path = r'C:\Users\Lenovo\Downloads\extractedcitrus\Citrus'
+dataset_path = r'C:\Users\Lama\Downloads\extractedcitrus\Citrus'
 num_classes = 20  # number of plant disease classes
 
 # Define transformations for data preprocessing
-transform = get_preprocessed_transform()
+train_transform = get_train_transform()
+val_transform = get_val_transform()
 
 # Load dataset
-dataset = ImageFolder(root=dataset_path, transform=transform)
+full_dataset = ImageFolder(root=dataset_path, transform=train_transform)
 
-total_size = len(dataset)
-train_size = int(0.8 * total_size)
-val_size = int(0.1 * total_size)
-test_size = total_size - train_size - val_size  # Ensure all data is used
+# Define sizes for splits
+train_percentage = 0.8
+val_percentage = 0.1
+test_percentage = 0.1
 
-# Create indices for each split
-indices = list(range(total_size))
-train_indices = indices[:train_size]
-val_indices = indices[train_size:train_size + val_size]
-test_indices = indices[train_size + val_size:]
-
-# Create subsets
-train_dataset = Subset(dataset, train_indices)
-val_dataset = Subset(dataset, val_indices)
-test_dataset = Subset(dataset, test_indices)
+# Split the dataset
+train_dataset, val_dataset, test_dataset = split_data(full_dataset, train_percentage, val_percentage, test_percentage)
 
 # Create data loaders
 train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
@@ -46,12 +41,21 @@ model.classifier[6] = torch.nn.Linear(in_features=4096, out_features=num_classes
 
 # Move model to GPU if available
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-model.to(device)
 
-# Define number of epochs
-num_epochs = 5
+# Define optimizer and criterion
+optimizer = optim.Adam(model.parameters(), lr=0.001)
+criterion = nn.CrossEntropyLoss()
 
 # Train the model
-train_model(model, train_loader, val_loader, num_epochs=num_epochs, device=device)
+print("Starting training...")
+train_model(model, train_loader, val_loader, num_epochs=3, device=device, optimizer=optimizer, criterion=criterion)
+
+# Evaluate the model on the test dataset
+print("Training complete. Evaluating model...")
+test_model(model, test_loader, device, criterion)
+
+print("Evaluation complete.")
+
+
 
 

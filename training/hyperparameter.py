@@ -1,2 +1,2 @@
-num_epochs = 5
+num_epochs = 3
 batch_size = 32

@@ -5,7 +5,7 @@ import torchvision.models as models
 save_path = r'C:\Users\Lama\Desktop\disease-detection\https---github.com-lama-hisham-plants\modelweights.pth'
 
 # Initialize the model (ensure this matches your trained model)
-num_classes = 20  # Update this to match your number of classes
+num_classes = 20 
 model = models.alexnet(pretrained=True)
 model.classifier[6] = torch.nn.Linear(in_features=4096, out_features=num_classes)
 
@@ -16,4 +16,4 @@ model.classifier[6] = torch.nn.Linear(in_features=4096, out_features=num_classes
 
 # Save the model weights
 torch.save(model.state_dict(), save_path)
-print(f'Model weights saved to {save_path}')
+print(f'Model weights saved to {save_path}')  
